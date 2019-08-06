@@ -13,6 +13,7 @@
 bin/
 gen/
 out/
+venv/
 
 # Gradle files
 .gradle/
@@ -47,3 +48,6 @@ freeline_project_description.json
 stringFile
 
 i18n_*
+
+.ipynb_checkpoints/
+

@@ -28,10 +28,7 @@ url = 'https://www.dianrong.com/feapi/plans/plan-notes/groups?includeHuoQiPlan=t
 
 r = requests.get(url, headers=headers, verify=False)
 groupItems = r.json()
-res = pd.DataFrame(columns=(
-    'loanId', 'loanStatus', 'loanStatusText', 'intRate', 'loanClass', 'remainingPaymentsCount', 'subType',
-    'subTypeText',
-    'holdingAmount', 'loanTotalTerms', 'loanPaidTerms', 'appAmount', 'classification', 'todayData'))
+
 
 
 def anaDetail(loanId):
@@ -42,7 +39,10 @@ def anaDetail(loanId):
 
 
 def anaItem(planId):
-    global res
+    res = pd.DataFrame(columns=(
+        'loanId', 'loanStatus', 'loanStatusText', 'intRate', 'loanClass', 'remainingPaymentsCount', 'subType',
+        'subTypeText',
+        'holdingAmount', 'loanTotalTerms', 'loanPaidTerms', 'appAmount', 'classification', 'todayData'))
     page = 0
     pagesize = 20
     while True:
@@ -66,10 +66,11 @@ def anaItem(planId):
                  "todayData": item['todayData']}
             res = res.append(a, ignore_index=True)
         if planSize <= page * pagesize:
+            res.to_csv('planId_' + str(int(time.time())) + '_data.csv', encoding='utf-8-sig')
             break
 
 
 for item in groupItems['content']['list']:
     planId = item['planId']
     anaItem(planId)
-    res.to_csv('planId_' + str(int(time.time())) + '_data.csv',encoding='utf-8-sig')
+
